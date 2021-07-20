@@ -8,7 +8,7 @@
         </h1>
     </div>
     @include('message')
-    {{ Form::open(['route' => 'users.store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
+    {{ Form::open(['route' => 'users.store', 'files' => true ]) }}
         <div class="row">
             <div class="col-xl-6">
                 <div id="panel-1" class="panel">

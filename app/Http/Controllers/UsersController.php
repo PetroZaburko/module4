@@ -6,8 +6,6 @@ use App\User;
 use App\UserStatuses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
@@ -37,14 +35,8 @@ class UsersController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed'
         ]);
-        if ($request->hasFile('avatar')) {
-            $image = $request->file('avatar')->store('', 'avatars');
-            $request->merge(['image' => $image]);
-        }
-        $request->merge(['password' => Hash::make($request->password)]);
-        $user = User::create($request->all());
-        $user->info()->create($request->all());
-        $user->links()->create($request->all());
+        $user = User::add($request->all());
+        $user->addAvatar($request->file('avatar'));
         return redirect()->route('users.all')->with([
             'message' => 'New user - ' . $user->info->name . ' was successful created',
             'status' => '1'
@@ -63,7 +55,7 @@ class UsersController extends Controller
             'name' => 'required|string|max:255'
         ]);
         $user = User::find($id);
-        $user->info->update($request->all());
+        $user->updateInfo($request->all());
         return redirect()->route('users.all')->with([
             'message' => $user->info->name . ' info-data were successful updated',
             'status' => '1'
@@ -87,12 +79,7 @@ class UsersController extends Controller
             'password' => 'string|min:6|confirmed|nullable'
         ]);
         $user = User::find($id);
-        if ($request->filled('password')) {
-            $request->merge(['password' => Hash::make($request->password)]);
-            $user->update($request->all());
-        } else {
-            $user->update($request->only('email'));
-        }
+        $user->updateSecurity($request->all());
         return redirect()->route('users.all')->with([
             'message' => $user->info->name . ' security-data were successful updated',
             'status' => '1'
@@ -128,11 +115,7 @@ class UsersController extends Controller
             'image' => 'required|mimes:jpeg,jpg,png'
         ]);
         $user = User::find($id);
-        if ($user->info->image) {
-            Storage::disk('avatars')->delete($user->info->image);
-        }
-        $image = $request->file('image')->store('', 'avatars');
-        $user->info->update(['image' => $image]);
+        $user->updateAvatar($request->file('image'));
         return redirect()->route('users.all')->with([
             'message' => $user->info->name . ' avatar was successful updated',
             'status' => '1'
@@ -142,19 +125,11 @@ class UsersController extends Controller
     public function delete($id)
     {
         $user = User::find($id);
-        $image = $user->info->image;
         $name = $user->info->name;
-        $user->delete();
-        if ($user->info->image) {
-            Storage::disk('avatars')->delete($image);
-        }
+        $user->remove();
         $message = "User $name , and all his data were successful deleted";
         if (Auth::id() == $id) {
             Auth::logout();
-            return redirect()->route('login')->with([
-                'message' => $message,
-                'status' => '0'
-            ]);
         }
         return redirect()->route('users.all')->with([
             'message' => $message,

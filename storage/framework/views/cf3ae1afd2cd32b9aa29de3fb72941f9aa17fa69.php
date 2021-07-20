@@ -6,7 +6,7 @@
         </h1>
     </div>
     <?php echo $__env->make('message', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-    <?php echo e(Form::open(['route' => ['users.update_info', 'user_id' => $user->id], 'method' => 'POST'])); ?>
+    <?php echo e(Form::open(['route' => ['users.update_info', 'id' => $user->id], 'method' => 'POST'])); ?>
 
         <div class="row">
             <div class="col-xl-6">

@@ -6,7 +6,8 @@
         </h1>
     </div>
     <?php echo $__env->make('message', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-    <?php echo e(Form::open(['route' => 'users.store', 'method' => 'POST', 'enctype' => 'multipart/form-data'])); ?>
+
+    <?php echo e(Form::open(['route' => 'users.store', 'files' => true ])); ?>
 
         <div class="row">
             <div class="col-xl-6">
