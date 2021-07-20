@@ -40,7 +40,6 @@ Route::name('users.')
                         Route::post('avatar/{id}', 'UsersController@updateAvatar')->name('update_avatar');
 
                         Route::get('delete/{id}', 'UsersController@delete')->name('delete');
-
                     });
             });
     });
