@@ -7,7 +7,7 @@
             <i class='subheader-icon fal fa-sun'></i> Установить статус
         </h1>
     </div>
-    {{ Form::open(['route' => ['users.update_status', 'id' => $user->id], 'method' => 'POST']) }}
+    {{ Form::open(['route' => ['users.update_status', 'id' => $user->id]]) }}
         <div class="row">
             <div class="col-xl-6">
                 <div id="panel-1" class="panel">

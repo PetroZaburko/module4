@@ -8,7 +8,7 @@
         </h1>
     </div>
     @include('message')
-    {{ Form::open(['route' => ['users.update_info', 'id' => $user->id], 'method' => 'POST']) }}
+    {{ Form::open(['route' => ['users.update_info', 'id' => $user->id]]) }}
         <div class="row">
             <div class="col-xl-6">
                 <div id="panel-1" class="panel">

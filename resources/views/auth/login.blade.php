@@ -24,8 +24,7 @@
                         @endif
                     @endif
                 </div>
-                <form action="{{ route('login') }}" method="POST" aria-label="{{ __('Login') }}">
-                    @csrf
+                {{ Form::open(['route' => 'login', 'aria-label' => __('Login') ]) }}
                     <div class="form-group">
                         <label class="form-label" for="email">{{ __('E-Mail Address') }}</label>
                         <input type="email" name="email" id="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="Email" value="{{ old('email') }}" required autofocus>
@@ -51,7 +50,7 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-default float-right">{{ __('Login') }}</button>
-                </form>
+                {{ Form::close() }}
             </div>
             <div class="blankpage-footer text-center">
                 <a class="btn btn-link" href="{{ route('password.request') }}">

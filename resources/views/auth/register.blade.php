@@ -36,8 +36,7 @@
                             </div>
                             <div class="col-xl-6 ml-auto mr-auto">
                                 <div class="card p-4 rounded-plus bg-faded">
-                                    <form id="js-login" novalidate="" action="{{ route('register') }}" method="POST" aria-label="{{ __('Register') }}">
-                                        @csrf
+                                    {{ Form::open(['route' => 'register', 'aria-label' => __('Register'), 'id' => 'js-login' ]) }}
                                         <div class="form-group">
                                             <label class="form-label" for="email">{{ __('E-Mail Address') }}</label>
                                             <input type="email" name="email" id="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="Эл. адрес" value="{{ old('email') }}" required>
@@ -80,7 +79,7 @@
                                                 <button id="js-login-btn" type="submit" class="btn btn-block btn-danger btn-lg mt-3">{{ __('Register') }}</button>
                                             </div>
                                         </div>
-                                    </form>
+                                    {{ Form::close() }}
                                 </div>
                             </div>
                         </div>
