@@ -10,7 +10,7 @@ class UserContollerTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testUserControllerActionStore()
+    public function testUserStore()
     {
         $data = [
             'email' => 'test_user@mail.com',
@@ -19,11 +19,11 @@ class UserContollerTest extends TestCase
             'name' => 'test_name',
             'vk' => 'test_vk'
         ];
-        $user = User::where('is_admin', 1)->first();
+        $user = factory(User::class)->create([
+            'is_admin' => '1'
+        ]);
         $response = $this->actingAs($user)->post('/user/store', $data);
         $response->assertStatus(302);
-        $response->assertRedirect('/users');
-        $response->assertSessionHas('message', 'New user - ' . $data['name'] . ' was successful created');
         $this->assertDatabaseHas('users', [
             'email' => $data['email']
         ]);
@@ -35,28 +35,21 @@ class UserContollerTest extends TestCase
         ]);
     }
 
-    public function testUserControllerActionDelete()
+    public function testUserDelete()
     {
-        $userId = rand(1, 10);
-        $user = User::find($userId);
-        $deleteId = rand(1, 10);
-        $response = $this->actingAs($user)->get(route('users.delete', ['id' => $deleteId]));
+        $user = factory(User::class)->create([
+            'is_admin' => '1'
+        ]);
+        $response = $this->actingAs($user)->get(route('users.delete', ['id' => $user->id]));
         $response->assertStatus(302);
-        if($userId == $deleteId) {
-            $response->assertRedirect('/login');
-            $this->assertGuest();
-        }else {
-            $response->assertRedirect('/users');
-            $this->assertAuthenticated();
-        }
         $this->assertDatabaseMissing('users', [
-            'id' => $deleteId
+            'id' => $user->id
         ]);
         $this->assertDatabaseMissing('user_infos', [
-            'user_id' => $deleteId
+            'user_id' => $user->id
         ]);
         $this->assertDatabaseMissing('user_links', [
-            'user_id' => $deleteId
+            'user_id' => $user->id
         ]);
     }
 }

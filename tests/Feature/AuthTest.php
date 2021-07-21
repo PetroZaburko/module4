@@ -50,6 +50,12 @@ class AuthTest extends TestCase
         ]);
         $response->assertStatus(302);
         $this->assertAuthenticated();
+        $this->assertDatabaseHas('users', [
+            'email' => $user->email
+        ]);
+        $this->assertDatabaseHas('user_infos', [
+            'name' => 'test_user'
+        ]);
     }
 
     public function testLoginUserWithWrongCredentials()
@@ -75,6 +81,12 @@ class AuthTest extends TestCase
             ]);
         $response->assertSessionHasErrors();
         $this->assertGuest();
+        $this->assertDatabaseMissing('users', [
+            'email' => $user->email
+        ]);
+        $this->assertDatabaseMissing('user_infos', [
+            'name' => 'test_user'
+        ]);
     }
 
     public function testLogoutUser()

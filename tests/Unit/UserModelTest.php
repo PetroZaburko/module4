@@ -17,9 +17,7 @@ class UserModelTest extends TestCase
             'password' => 'asdfg001',
             'name' => 'test_name'
         ];
-        $user = User::create($data);
-        $user->info()->create($data);
-        $user->links()->create($data);
+        $user = User::add($data);
         $this->assertDatabaseHas('users', [
             'email' => $data['email']
         ]);
@@ -40,8 +38,8 @@ class UserModelTest extends TestCase
             'telephone' => 'test_telephone',
             'address' => 'test_telephone'
         ];
-        $user = User::find(rand(1, 10));
-        $user->info->update($data);
+        $user = factory(User::class)->create();
+        $user->updateInfo($data);
         $this->assertDatabaseHas('user_infos', $data);
     }
 
@@ -51,8 +49,8 @@ class UserModelTest extends TestCase
             'email' => 'new_test_user@mail.com',
             'password' => 'new_asdfg001'
         ];
-        $user = User::find(rand(1, 10));
-        $user->update($data);
+        $user = factory(User::class)->create();
+        $user->updateSecurity($data);
         $this->assertDatabaseHas('users', [
             'email' => $data['email']
         ]);
