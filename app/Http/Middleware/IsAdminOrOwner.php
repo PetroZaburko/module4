@@ -21,9 +21,6 @@ class IsAdminOrOwner
         if(Auth::user()->is_admin or Auth::id() == $request->id){
             return $next($request);
         }
-        return redirect()->route('users.all')->with([
-            'message'=> 'You don\'t have enough permissions',
-            'status' => 0
-        ]);
+        abort(404);
     }
 }
